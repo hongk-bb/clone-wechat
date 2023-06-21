@@ -7,7 +7,7 @@
 			domModule.addRule('fontFace', {
 				'fontFamily': "iconfont",
 				'src': "url('https://at.alicdn.com/t/font_1365296_vumpzwvr0z.ttf')"
-			});
+			})
 			// #endif
 			console.log('App Launch')
 		},
