@@ -1,0 +1,26 @@
+<template>
+	<view class="flex">
+		<view class="flex-1 bg-danger" style="height: 200px;"></view>
+		<view class="flex-1 bg-dark" style="height: 200px;"></view>
+	</view>
+</template>
+
+<script>
+	export default {
+		data() {
+			return {
+				
+			}
+		},
+		onLoad() {
+
+		},
+		methods: {
+
+		}
+	}
+</script>
+
+<style>
+	
+</style>
