@@ -19,11 +19,30 @@
 		</view>
 		<!-- 占位 -->
 		<view v-if="fixed" :style="fixedStyle"></view>
+		
+		<!-- 扩展菜单 -->
+		<free-popup ref="extend" :bodyWidth="320" :bodyHeight="525"
+		bodyBgColor="bg-dark" transformOrigin="right top">
+			<view class="flex flex-column" 
+			style="width: 320rpx;height: 525rpx;">
+				<view class="flex-1 flex align-center" 
+				hover-class="bg-hover-dark"
+				v-for="(item,index) in menus"
+				:key="index"
+				@click="clickEvent(item.event)">
+					<text class="iconfont pl-3 pr-2 font-md text-white">{{item.icon}}</text>
+					<text class="font-md text-white">{{item.name}}</text>
+				</view>
+			</view>
+		</free-popup>
+		
+		
 	</view>
 </template>
 
 <script>
 	import freeIconButton from "./free-icon-button.vue"
+	import freePopup from "./free-popup.vue"
 	export default {
 		props: {
 			title: {
@@ -40,12 +59,40 @@
 			}
 		},
 		components:{
-			freeIconButton
+			freeIconButton,
+			freePopup
 		},
 		data() {
 			return {
 				statusBarHeight:0,
-				navBarHeight:0
+				navBarHeight:0,
+				menus:[
+					{
+						name:"发起群聊",
+						event:"",
+						icon:"\ue633"
+					},
+					{
+						name:"添加好友",
+						event:"",
+						icon:"\ue65d"
+					},
+					{
+						name:"扫一扫",
+						event:"",
+						icon:"\ue614"
+					},
+					{
+						name:"收付款",
+						event:"",
+						icon:"\ue66c"
+					},
+					{
+						name:"帮助与反馈",
+						event:"",
+						icon:"\ue66c"
+					}
+				],
 			}
 		},
 		mounted() {
@@ -65,7 +112,7 @@
 		},
 		methods: {
 			openExtend() {
-				this.$emit('openExtend')
+				this.$refs.extend.show(uni.upx2px(415),uni.upx2px(150))
 			}
 		},
 	}

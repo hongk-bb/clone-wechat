@@ -4,7 +4,7 @@
 		<div v-if="mask" class="position-fixed top-0 left-0 right-0 bottom-0"
 		:style="getMaskColor" @click="hide"></div>
 		<!-- 弹出框内容 -->
-		<div ref="popup" class="position-fixed bg-white free-animated" :class="getBodyClass" :style="getBodyStyle">
+		<div ref="popup" class="position-fixed free-animated" :class="getBodyClass" :style="getBodyStyle">
 			<slot></slot>
 		</div>
 	</div>
@@ -41,6 +41,14 @@
 				type:Number,
 				default:0
 			},
+			bodyBgColor:{
+				type:String,
+				default:"bg-white"
+			},
+			transformOrigin:{
+				type:String,
+				default:"left top"
+			}
 		},
 		data() {
 			return {
@@ -67,7 +75,7 @@
 			},
 			getBodyClass(){
 				let bottom = this.bottom ? 'left-0 right-0 bottom-0' : 'rounded border'
-				return bottom
+				return `${this.bodyBgColor} ${bottom}`
 			},
 			getBodyStyle(){
 				let left = this.x > -1 ? `left:${this.x}px;` : ''
@@ -85,7 +93,7 @@
 					animation.transition(this.$refs.popup, {
 					    styles: {
 					        transform: 'scale(1,1)',
-							transformOrigin:'left top',
+							transformOrigin:this.transformOrigin,
 							opacity:1
 					    },
 					    duration: 100, //ms
@@ -102,7 +110,7 @@
 				animation.transition(this.$refs.popup, {
 				styles: {
 					transform: 'scale(0,0)',
-					transformOrigin:'left top',
+					transformOrigin:this.transformOrigin,
 					opacity:0
 				},
 				duration: 100, //ms

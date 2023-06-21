@@ -1,5 +1,5 @@
 <template>
-	<text class="free-badge bg-danger text-white rounded-circle font-sm" :class="badgeClass" :style="badgeStyle"><slot></slot></text>
+	<rick-text class="free-badge bg-danger text-white rounded-circle font-sm" :class="badgeClass" :style="badgeStyle"><slot></slot></rick-text>
 </template>
 
 <script>
