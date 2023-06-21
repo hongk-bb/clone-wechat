@@ -5,17 +5,17 @@
 <script>
 	export default {
 		props: {
-			size: {
-				type: [String, Number],
-				default: 90
+			size:{
+				type:[String,Number],
+				default:90
 			},
 			src: {
 				type: String,
 				default: ""
 			},
-			type: {
-				type: String,
-				default: "rounded"
+			type:{
+				type:String,
+				default:"rounded"
 			}
 		},
 		computed: {

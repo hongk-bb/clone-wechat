@@ -1,5 +1,5 @@
 <template>
-	<view hover-class="bg-light">
+	<view :class="item.istop ? 'bg-light' : 'bg-white'" hover-class="bg-light">
 	<div class="flex align-stretch" @click="onClick" @longpress="long">
 		<view class="flex align-center justify-center position-relative"
 		style="width: 145rpx;">
@@ -51,7 +51,11 @@
 				x = e.detail.x
 				y = e.detail.y
 				// #endif
-				this.$emit('long',{x,y})
+				this.$emit('long',{
+					x,
+					y,
+					index:this.index
+				})
 			}
 		}
 	}

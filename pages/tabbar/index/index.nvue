@@ -3,12 +3,19 @@
 		
 		
 		<!-- 导航栏 -->
-		<free-nav-bar title="仿微信" :noreadnum="1" @openExtend="openExtend">
+		<free-nav-bar title="仿微信" :noreadnum="1">
 		</free-nav-bar>
 		
-		<!-- 列表 -->
+		
+		<!-- 置顶列表 -->
 		<block v-for="(item,index) in list" :key="index">
-			<free-media-list :item="item" :index="index"
+			<free-media-list v-if="item.istop" :item="item" :index="index"
+			@long="long"></free-media-list>
+		</block>
+		
+		<!-- 非置顶列表 -->
+		<block v-for="(item,index) in list" :key="index">
+			<free-media-list v-if="!item.istop" :item="item" :index="index"
 			@long="long"></free-media-list>
 		</block>
 		
@@ -46,6 +53,7 @@
 		},
 		data() {
 			return {
+				propIndex:-1,
 				menus:[
 					{
 						name:"设为置顶",
@@ -62,84 +70,96 @@
 						nickname:"summer",
 						update_time:1567704767,
 						data:"帝莎编程学院",
-						noreadnum:1
+						noreadnum:1,
+						istop:false
 					},
 					{
 						avatar:"/static/images/demo/demo6.jpg",
 						nickname:"summer",
 						update_time:1567695767,
 						data:"帝莎编程学院",
-						noreadnum:0
+						noreadnum:0,
+						istop:false
 					},
 					{
 						avatar:"/static/images/demo/demo6.jpg",
 						nickname:"summer",
 						update_time:1567695767,
 						data:"帝莎编程学院",
-						noreadnum:0
+						noreadnum:0,
+						istop:false
 					},
 					{
 						avatar:"/static/images/demo/demo6.jpg",
 						nickname:"summer",
 						update_time:1567695767,
 						data:"帝莎编程学院",
-						noreadnum:0
+						noreadnum:0,
+						istop:false
+					},
+					{
+						avatar:"/static/images/demo/demo6.jpg",
+						nickname:"summer123",
+						update_time:1567704767,
+						data:"帝莎编程学院",
+						noreadnum:1,
+						istop:true
+					},
+					{
+						avatar:"/static/images/demo/demo6.jpg",
+						nickname:"summer456",
+						update_time:1567695767,
+						data:"帝莎编程学院",
+						noreadnum:0,
+						istop:false
+					},
+					{
+						avatar:"/static/images/demo/demo6.jpg",
+						nickname:"summer",
+						update_time:1567695767,
+						data:"帝莎编程学院",
+						noreadnum:0,
+						istop:false
+					},
+					{
+						avatar:"/static/images/demo/demo6.jpg",
+						nickname:"summer",
+						update_time:1567695767,
+						data:"帝莎编程学院",
+						noreadnum:0,
+						istop:false
 					},
 					{
 						avatar:"/static/images/demo/demo6.jpg",
 						nickname:"summer",
 						update_time:1567704767,
 						data:"帝莎编程学院",
-						noreadnum:1
+						noreadnum:1,
+						istop:false
 					},
 					{
 						avatar:"/static/images/demo/demo6.jpg",
 						nickname:"summer",
 						update_time:1567695767,
 						data:"帝莎编程学院",
-						noreadnum:0
+						noreadnum:0,
+						istop:false
 					},
 					{
 						avatar:"/static/images/demo/demo6.jpg",
 						nickname:"summer",
 						update_time:1567695767,
 						data:"帝莎编程学院",
-						noreadnum:0
+						noreadnum:0,
+						istop:false
 					},
 					{
 						avatar:"/static/images/demo/demo6.jpg",
 						nickname:"summer",
 						update_time:1567695767,
 						data:"帝莎编程学院",
-						noreadnum:0
-					},
-					{
-						avatar:"/static/images/demo/demo6.jpg",
-						nickname:"summer",
-						update_time:1567704767,
-						data:"帝莎编程学院",
-						noreadnum:1
-					},
-					{
-						avatar:"/static/images/demo/demo6.jpg",
-						nickname:"summer",
-						update_time:1567695767,
-						data:"帝莎编程学院",
-						noreadnum:0
-					},
-					{
-						avatar:"/static/images/demo/demo6.jpg",
-						nickname:"summer",
-						update_time:1567695767,
-						data:"帝莎编程学院",
-						noreadnum:0
-					},
-					{
-						avatar:"/static/images/demo/demo6.jpg",
-						nickname:"summer",
-						update_time:1567695767,
-						data:"帝莎编程学院",
-						noreadnum:0
+						noreadnum:0,
+						istop:false
 					}
 				]
 			}
@@ -159,22 +179,36 @@
 			}
 		},
 		methods: {
-			long({x,y}){
+			long({x,y,index}){
+				// 初始化 索引
+				this.propIndex = index
+				// 拿到当前对象
+				let item = this.list[index]
+				// 判断之前是否处于置顶状态
+				this.menus[0].name = item.istop ? '取消置顶' : '设为置顶'
+				
 				this.$refs.extend.show(x,y)
-			},
-			openExtend(){
-				this.$refs.extend.show(100,100)
 			},
 			// 分发菜单事件
 			clickEvent(event){
 				switch (event){
-					case "setTop":
-					
+					case "setTop": // 置顶/取消置顶会话
+					this.setTop()
 						break;
-					case "delChat":
-					
+					case "delChat": // 删除当前会话
+					this.delChat()
 						break;
 				}
+				this.$refs.extend.hide()
+			},
+			// 删除当前会话
+			delChat(){
+				this.list.splice(this.propIndex,1)
+			},
+			// 置顶/取消置顶会话
+			setTop(){
+				let item = this.list[this.propIndex]
+				item.istop = !item.istop
 			}
 		}
 	}
