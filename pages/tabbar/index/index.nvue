@@ -3,14 +3,30 @@
 		
 		
 		<!-- 导航栏 -->
-		<free-nav-bar :title="true">
-			<template slot="title">仿微信(10)</template>
+		<free-nav-bar title="仿微信" :noreadnum="1" @openExtend="openExtend">
 		</free-nav-bar>
 		
 		<!-- 列表 -->
 		<block v-for="(item,index) in list" :key="index">
-			<free-media-list :item="item" :index="index"></free-media-list>
+			<free-media-list :item="item" :index="index"
+			@long="long"></free-media-list>
 		</block>
+		
+		
+		<!-- 弹出层 -->
+		<free-popup ref="extend" :bodyWidth="240" :bodyHeight="getMenusHeight">
+			<view class="flex flex-column" 
+			style="width: 240rpx;"
+			:style="getMenusStyle">
+				<view class="flex-1 flex align-center" 
+				hover-class="bg-light"
+				v-for="(item,index) in menus"
+				:key="index"
+				@click="clickEvent(item.event)">
+					<text class="font-md pl-3">{{item.name}}</text>
+				</view>
+			</view>
+		</free-popup>
 		
 		
 	</view>
@@ -19,14 +35,84 @@
 <script>
 	import freeNavBar from "@/components/free-ui/free-nav-bar.vue"
 	import freeMediaList from "@/components/free-ui/free-media-list.vue"
+	
+	import freePopup from "@/components/free-ui/free-popup.vue"
+	
 	export default {
 		components:{
 			freeNavBar,
-			freeMediaList
+			freeMediaList,
+			freePopup
 		},
 		data() {
 			return {
+				menus:[
+					{
+						name:"设为置顶",
+						event:"setTop"
+					},
+					{
+						name:"删除该聊天",
+						event:"delChat"
+					}
+				],
 				list:[
+					{
+						avatar:"/static/images/demo/demo6.jpg",
+						nickname:"summer",
+						update_time:1567704767,
+						data:"帝莎编程学院",
+						noreadnum:1
+					},
+					{
+						avatar:"/static/images/demo/demo6.jpg",
+						nickname:"summer",
+						update_time:1567695767,
+						data:"帝莎编程学院",
+						noreadnum:0
+					},
+					{
+						avatar:"/static/images/demo/demo6.jpg",
+						nickname:"summer",
+						update_time:1567695767,
+						data:"帝莎编程学院",
+						noreadnum:0
+					},
+					{
+						avatar:"/static/images/demo/demo6.jpg",
+						nickname:"summer",
+						update_time:1567695767,
+						data:"帝莎编程学院",
+						noreadnum:0
+					},
+					{
+						avatar:"/static/images/demo/demo6.jpg",
+						nickname:"summer",
+						update_time:1567704767,
+						data:"帝莎编程学院",
+						noreadnum:1
+					},
+					{
+						avatar:"/static/images/demo/demo6.jpg",
+						nickname:"summer",
+						update_time:1567695767,
+						data:"帝莎编程学院",
+						noreadnum:0
+					},
+					{
+						avatar:"/static/images/demo/demo6.jpg",
+						nickname:"summer",
+						update_time:1567695767,
+						data:"帝莎编程学院",
+						noreadnum:0
+					},
+					{
+						avatar:"/static/images/demo/demo6.jpg",
+						nickname:"summer",
+						update_time:1567695767,
+						data:"帝莎编程学院",
+						noreadnum:0
+					},
 					{
 						avatar:"/static/images/demo/demo6.jpg",
 						nickname:"summer",
@@ -61,8 +147,35 @@
 		onLoad() {
 			
 		},
+		computed:{
+			// 动态获取菜单高度
+			getMenusHeight(){
+				let H = 100
+				return this.menus.length * H
+			},
+			// 获取菜单的样式
+			getMenusStyle(){
+				return `height: ${this.getMenusHeight}rpx;`
+			}
+		},
 		methods: {
-
+			long({x,y}){
+				this.$refs.extend.show(x,y)
+			},
+			openExtend(){
+				this.$refs.extend.show(100,100)
+			},
+			// 分发菜单事件
+			clickEvent(event){
+				switch (event){
+					case "setTop":
+					
+						break;
+					case "delChat":
+					
+						break;
+				}
+			}
 		}
 	}
 </script>

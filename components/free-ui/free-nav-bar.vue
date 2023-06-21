@@ -8,14 +8,12 @@
 				<!-- 左边 -->
 				<view class="flex align-center">
 					<!-- 标题 -->
-					<text v-if="title" 
-					class="font-md ml-3"
-					><slot name="title"></slot></text>
+					<text v-if="title" class="font-md ml-3">{{getTitle}}</text>
 				</view>
 				<!-- 右边 -->
 				<view class="flex align-center">
-					<free-icon-button>&#xe6e3;</free-icon-button>
-					<free-icon-button>&#xe682;</free-icon-button>
+					<free-icon-button @click="search">&#xe6e3;</free-icon-button>
+					<free-icon-button @click="openExtend">&#xe682;</free-icon-button>
 				</view>
 			</view>
 		</view>
@@ -29,12 +27,16 @@
 	export default {
 		props: {
 			title: {
-				type: Boolean,
+				type: [String,Boolean],
 				default:false 
 			},
 			fixed:{
 				type:Boolean,
 				default:true
+			},
+			noreadnum:{
+				type:Number,
+				default:0
 			}
 		},
 		components:{
@@ -55,6 +57,15 @@
 		computed: {
 			fixedStyle() {
 				return `height:${this.navBarHeight}px`
+			},
+			getTitle(){
+				let noreadnum = this.noreadnum > 0 ? '('+this.noreadnum+')' : ''
+				return this.title + noreadnum
+			}
+		},
+		methods: {
+			openExtend() {
+				this.$emit('openExtend')
 			}
 		},
 	}
