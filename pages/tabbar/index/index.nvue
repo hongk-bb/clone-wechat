@@ -3,42 +3,32 @@
 		
 		
 		<!-- 导航栏 -->
-		<view class="bg-light">
-			<!-- 状态栏 -->
-			<view :style="'height:'+statusBarHeight+'px'"></view>
-			<!-- 导航 -->
-			<view class="w-100 flex align-center justify-between border" style="height: 90rpx;">
-				<!-- 左边 -->
-				<view class="flex align-center">
-					<!-- 标题 -->
-					<text class="font-md ml-3">wechat-clone(10)</text>
-				</view>
-				<!-- 右边 -->
-				<view class="flex align-center">
-					<free-icon-button>&#xe6e3;</free-icon-button>
-					<free-icon-button>&#xe682;</free-icon-button>
-				</view>
-			</view>
+		<free-nav-bar :title="true">
+			<template slot="title">仿微信(10)</template>
+		</free-nav-bar>
+		
+		<!-- 列表 -->
+		<view style="height: 2000rpx;">
+			<text>列表</text>
 		</view>
+		
 		
 	</view>
 </template>
 
 <script>
-	import freeIconButton from "@/components/free-ui/free-icon-button.vue"
+	import freeNavBar from "@/components/free-ui/free-nav-bar.vue"
 	export default {
 		components:{
-			freeIconButton
+			freeNavBar
 		},
 		data() {
 			return {
-				statusBarHeight:0
+				
 			}
 		},
 		onLoad() {
-			// #ifdef APP-PLUS-NVUE
-			this.statusBarHeight = plus.navigator.getStatusbarHeight()
-			// #endif
+			
 		},
 		methods: {
 
