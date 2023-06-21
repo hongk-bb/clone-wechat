@@ -8,34 +8,68 @@
 		</free-nav-bar>
 		
 		<!-- 列表 -->
-		<view class="flex align-center">
-			<view class="flex align-center justify-center"
-			style="width: 145rpx;">
-				<image src="/static/images/demo/demo6.jpg"
-				mode="widthFix" style="width: 92rpx;height: 92rpx;"
-				class="rounded"></image>
-			</view>
-			<view class="flex flex-column border-bottom flex-1 py-3 pr-3 border-light-secondary">
-				<view class="flex align-center justify-between mb-1">
-					<text class="font-md">昵称</text>
-					<text class="font-sm text-light-muted">14:59</text>
+		<block v-for="(item,index) in list" :key="index">
+			<view class="flex align-center">
+				<view class="flex align-center justify-center"
+				style="width: 145rpx;">
+					<image :src="item.avatar"
+					mode="widthFix" style="width: 92rpx;height: 92rpx;"
+					class="rounded"></image>
 				</view>
-				<text class="font text-ellipsis text-light-muted">帝莎编程学院</text>
+				<view class="flex flex-column border-bottom flex-1 py-3 pr-3 border-light-secondary">
+					<view class="flex align-center justify-between mb-1">
+						<text class="font-md">{{item.nickname}}</text>
+						<text class="font-sm text-light-muted">{{item.update_time|formatTime}}</text>
+					</view>
+					<text class="font text-ellipsis text-light-muted">{{item.data}}</text>
+				</view>
 			</view>
-		</view>
+		</block>
+		
 		
 	</view>
 </template>
 
 <script>
 	import freeNavBar from "@/components/free-ui/free-nav-bar.vue"
+	import $Time from "@/common/free-lib/time.js"
 	export default {
 		components:{
 			freeNavBar
 		},
 		data() {
 			return {
-				
+				list:[
+					{
+						avatar:"/static/images/demo/demo6.jpg",
+						nickname:"summer",
+						update_time:1567704767,
+						data:"帝莎编程学院"
+					},
+					{
+						avatar:"/static/images/demo/demo6.jpg",
+						nickname:"summer",
+						update_time:1567695767,
+						data:"帝莎编程学院"
+					},
+					{
+						avatar:"/static/images/demo/demo6.jpg",
+						nickname:"summer",
+						update_time:1567695767,
+						data:"帝莎编程学院"
+					},
+					{
+						avatar:"/static/images/demo/demo6.jpg",
+						nickname:"summer",
+						update_time:1567695767,
+						data:"帝莎编程学院"
+					}
+				]
+			}
+		},
+		filters: {
+			formatTime(value) {
+				return $Time.gettime(value);
 			}
 		},
 		onLoad() {
