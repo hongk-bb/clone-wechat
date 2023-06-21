@@ -20,10 +20,12 @@
 </template>
 
 <script>
+	import freeBase from "@/common/mixin/free-base.js"
+	
 	import freeAvater from "@/components/free-ui/free-avater.vue"
 	import freeBadge from "@/components/free-ui/free-badge.vue"
-	import $Time from "@/common/free-lib/time.js"
 	export default {
+		mixins:[freeBase],
 		components: {
 			freeAvater,
 			freeBadge
@@ -31,11 +33,6 @@
 		props: {
 			item: Object,
 			index:Number
-		},
-		filters: {
-			formatTime(value) {
-				return $Time.gettime(value);
-			}
 		},
 		methods:{
 			onClick(){
