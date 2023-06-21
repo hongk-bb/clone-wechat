@@ -9,10 +9,11 @@
 		
 		<!-- 列表 -->
 		<block v-for="(item,index) in list" :key="index">
-			<view class="flex align-center">
-				<view class="flex align-center justify-center"
+			<view class="flex align-stretch">
+				<view class="flex align-center justify-center position-relative"
 				style="width: 145rpx;">
 					<free-avater :src="item.avatar" size="92"></free-avater>
+					<text class="bg-danger text-white rounded-circle font-sm position-absolute" style="padding-left: 14rpx;padding-right: 14rpx;padding-bottom: 6rpx;padding-top: 6rpx;right: 15rpx;top: 15rpx;">1</text>
 				</view>
 				<view class="flex flex-column border-bottom flex-1 py-3 pr-3 border-light-secondary">
 					<view class="flex align-center justify-between mb-1">
