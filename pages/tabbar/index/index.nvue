@@ -12,9 +12,7 @@
 			<view class="flex align-center">
 				<view class="flex align-center justify-center"
 				style="width: 145rpx;">
-					<image :src="item.avatar"
-					mode="widthFix" style="width: 92rpx;height: 92rpx;"
-					class="rounded"></image>
+					<free-avater :src="item.avatar" size="92"></free-avater>
 				</view>
 				<view class="flex flex-column border-bottom flex-1 py-3 pr-3 border-light-secondary">
 					<view class="flex align-center justify-between mb-1">
@@ -32,10 +30,12 @@
 
 <script>
 	import freeNavBar from "@/components/free-ui/free-nav-bar.vue"
+	import freeAvater from "@/components/free-ui/free-avater.vue"
 	import $Time from "@/common/free-lib/time.js"
 	export default {
 		components:{
-			freeNavBar
+			freeNavBar,
+			freeAvater
 		},
 		data() {
 			return {
