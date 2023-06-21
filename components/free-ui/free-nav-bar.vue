@@ -8,9 +8,9 @@
 				<!-- 左边 -->
 				<view class="flex align-center">
 					<!-- 标题 -->
-					<text v-if="title" class="font-md ml-3">
-						<slot name="title"></slot>
-					</text>
+					<text v-if="title" 
+					class="font-md ml-3"
+					><slot name="title"></slot></text>
 				</view>
 				<!-- 右边 -->
 				<view class="flex align-center">
@@ -30,20 +30,20 @@
 		props: {
 			title: {
 				type: Boolean,
-				default: false
+				default:false 
 			},
-			fixed: {
-				type: Boolean,
-				default: true
+			fixed:{
+				type:Boolean,
+				default:true
 			}
 		},
-		components: {
+		components:{
 			freeIconButton
 		},
 		data() {
 			return {
-				statusBarHeight: 0,
-				navBarHeight: 0
+				statusBarHeight:0,
+				navBarHeight:0
 			}
 		},
 		mounted() {
