@@ -9,21 +9,7 @@
 		
 		<!-- 列表 -->
 		<block v-for="(item,index) in list" :key="index">
-			<view class="flex align-stretch">
-				<view class="flex align-center justify-center position-relative"
-				style="width: 145rpx;">
-					<free-avater :src="item.avatar" size="92"></free-avater>
-					<free-badge badgeClass="position-absolute"
-					badgeStyle="top:15rpx;right:15rpx">1</free-badge>
-				</view>
-				<view class="flex flex-column border-bottom flex-1 py-3 pr-3 border-light-secondary">
-					<view class="flex align-center justify-between mb-1">
-						<text class="font-md">{{item.nickname}}</text>
-						<text class="font-sm text-light-muted">{{item.update_time|formatTime}}</text>
-					</view>
-					<text class="font text-ellipsis text-light-muted">{{item.data}}</text>
-				</view>
-			</view>
+			<free-media-list :item="item" :index="index"></free-media-list>
 		</block>
 		
 		
@@ -32,14 +18,11 @@
 
 <script>
 	import freeNavBar from "@/components/free-ui/free-nav-bar.vue"
-	import freeAvater from "@/components/free-ui/free-avater.vue"
-	import freeBadge from "@/components/free-ui/free-badge.vue"
-	import $Time from "@/common/free-lib/time.js"
+	import freeMediaList from "@/components/free-ui/free-media-list.vue"
 	export default {
 		components:{
 			freeNavBar,
-			freeAvater,
-			freeBadge
+			freeMediaList
 		},
 		data() {
 			return {
@@ -48,32 +31,31 @@
 						avatar:"/static/images/demo/demo6.jpg",
 						nickname:"summer",
 						update_time:1567704767,
-						data:"帝莎编程学院"
+						data:"帝莎编程学院",
+						noreadnum:1
 					},
 					{
 						avatar:"/static/images/demo/demo6.jpg",
 						nickname:"summer",
 						update_time:1567695767,
-						data:"帝莎编程学院"
+						data:"帝莎编程学院",
+						noreadnum:0
 					},
 					{
 						avatar:"/static/images/demo/demo6.jpg",
 						nickname:"summer",
 						update_time:1567695767,
-						data:"帝莎编程学院"
+						data:"帝莎编程学院",
+						noreadnum:0
 					},
 					{
 						avatar:"/static/images/demo/demo6.jpg",
 						nickname:"summer",
 						update_time:1567695767,
-						data:"帝莎编程学院"
+						data:"帝莎编程学院",
+						noreadnum:0
 					}
 				]
-			}
-		},
-		filters: {
-			formatTime(value) {
-				return $Time.gettime(value);
 			}
 		},
 		onLoad() {
