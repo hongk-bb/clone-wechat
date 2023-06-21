@@ -1,5 +1,7 @@
 <template>
-	<view class="page">
+	<view>
+		
+		
 		<!-- 导航栏 -->
 		<view class="bg-light">
 			<!-- 状态栏 -->
@@ -13,23 +15,24 @@
 				</view>
 				<!-- 右边 -->
 				<view class="flex align-center">
-					<view class="flex align-center justify-center border" style="height: 90rpx;width: 90rpx;">
-						<text class="iconfont font-md">&#xe6e3;</text>
-					</view>
-					<view class="flex align-center justify-center border" style="height: 90rpx;width: 90rpx;">
-						<text class="iconfont font-md">&#xe682;</text>
-					</view>
+					<free-icon-button>&#xe6e3;</free-icon-button>
+					<free-icon-button>&#xe682;</free-icon-button>
 				</view>
 			</view>
 		</view>
+		
 	</view>
 </template>
 
 <script>
+	import freeIconButton from "@/components/free-ui/free-icon-button.vue"
 	export default {
+		components:{
+			freeIconButton
+		},
 		data() {
 			return {
-				statusBarHeight: 0
+				statusBarHeight:0
 			}
 		},
 		onLoad() {
@@ -44,5 +47,5 @@
 </script>
 
 <style>
-
+	
 </style>
