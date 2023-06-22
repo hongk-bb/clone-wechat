@@ -15,7 +15,7 @@
 			<block v-for="(item,index) in list" :key="index">
 				<free-chat-item :item="item" :index="index" ref="chatItem"
 				:pretime=" index > 0 ? list[index-1].create_time : 0"
-				@long="long"></free-chat-item>
+				@long="long" @preview="previewImage"></free-chat-item>
 			</block>
 		</scroll-view>
 		
@@ -255,6 +255,16 @@
 			// 获取操作或者表情列表
 			emoticonOrActionList(){
 				return (this.mode === 'emoticon' || this.mode === 'action') ? this[this.mode+'List'] : []
+			},
+			// 所有信息的图片地址
+			imageList(){
+				let arr = []
+				this.list.forEach((item)=>{
+					if (item.type === 'emoticon' || item.type === 'image') {
+						arr.push(item.data)
+					}
+				})
+				return arr
 			}
 		},
 		watch: {
@@ -367,8 +377,17 @@
 			// 扩展菜单
 			actionEvent(e){
 				switch (e.event){
-					case 'uploadImage':
-					console.log('上传图片');
+					case 'uploadImage': // 选择相册
+					uni.chooseImage({
+						count:9,
+						success: (res) => {
+							// 发送到服务器
+							// 渲染到页面
+							res.tempFilePaths.forEach((item)=>{
+								this.send('image',item)
+							})
+						}
+					})
 						break;
 					case 'sendEmoticon': // 发送表情包
 					this.send('emoticon',e.icon)
@@ -378,6 +397,14 @@
 			// 点击页面
 			clickPage(){
 				this.mode = ''
+			},
+			// 预览图片
+			previewImage(url){
+				uni.previewImage({
+					current:url,
+					urls:this.imageList,
+					indicator:"default"
+				})
 			}
 		}
 	}

@@ -23,9 +23,8 @@
 			<div class="p-2 rounded" :class="labelClass" style="max-width:500rpx;">
 				<!-- 文字 -->
 				<text v-if="item.type === 'text'" class="font-md">{{item.data}}</text>
-				<!-- 表情包 -->
-				<image v-else-if="item.type === 'emoticon'" :src="item.data"
-				lazy-load mode="widthFix" style="width: 300rpx;height: 300rpx;"></image>
+				<!-- 表情包 | 图片-->
+				<free-image  v-else-if="item.type === 'emoticon' || item.type === 'image'" :src="item.data" @click="preview(item.data)" imageClass="rounded" :maxWidth="500" :maxHeight="350"></free-image>
 				
 			</div>
 			<!-- 本人 -->
@@ -40,16 +39,23 @@
 
 <script>
 	import freeAvater from "@/components/free-ui/free-avater.vue"
+	import freeImage from './free-image.vue';
 	import $T from "@/common/free-lib/time.js"
 	export default {
 		components: {
-			freeAvater
+			freeAvater,
+			freeImage
 		},
 		props: {
 			item: Object,
 			index:Number,
 			// 上一条消息的时间戳
 			pretime:[Number,String]
+		},
+		data() {
+			return {
+				
+			}
 		},
 		computed: {
 			// 是否是本人
@@ -94,6 +100,10 @@
 			// #endif
 		},
 		methods:{
+			// 预览图片
+			preview(url){
+				this.$emit('preview',url)
+			},
 			// 长按事件
 			long(e){
 				let x = 0
