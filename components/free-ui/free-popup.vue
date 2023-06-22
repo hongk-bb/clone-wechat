@@ -48,6 +48,11 @@
 			transformOrigin:{
 				type:String,
 				default:"left top"
+			},
+			// tabbar高度
+			tabbarHeight:{
+				type:Number,
+				default:0
 			}
 		},
 		data() {
@@ -63,7 +68,7 @@
 			try {
 			    const res = uni.getSystemInfoSync();
 				this.maxX = res.windowWidth - uni.upx2px(this.bodyWidth)
-				this.maxY = res.windowHeight - uni.upx2px(this.bodyHeight)
+				this.maxY = res.windowHeight - uni.upx2px(this.bodyHeight) - uni.upx2px(this.tabbarHeight)
 			} catch (e) {
 			    // error
 			}
