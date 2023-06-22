@@ -7,14 +7,19 @@
 			<view class="w-100 flex align-center justify-between" style="height: 90rpx;">
 				<!-- 左边 -->
 				<view class="flex align-center">
+					<!-- 返回按钮 -->
+					<free-icon-button v-if="showBack" @click="back"
+					:icon="'\ue60d'"></free-icon-button>
 					<!-- 标题 -->
 					<text v-if="title" class="font-md ml-3">{{getTitle}}</text>
 				</view>
 				<!-- 右边 -->
 				<view class="flex align-center">
 					<slot name="right">
-						<free-icon-button @click="search">&#xe6e3;</free-icon-button>
-						<free-icon-button @click="openExtend">&#xe682;</free-icon-button>
+						<free-icon-button @click="search" 
+						:icon="'\ue6e3'"></free-icon-button>
+						<free-icon-button @click="openExtend"
+						:icon="'\ue682'"></free-icon-button>
 					</slot>
 				</view>
 			</view>
@@ -47,6 +52,10 @@
 	import freePopup from "./free-popup.vue"
 	export default {
 		props: {
+			showBack:{
+				type:Boolean,
+				default:false
+			},
 			title: {
 				type: [String,Boolean],
 				default:false 
@@ -123,6 +132,12 @@
 		methods: {
 			openExtend() {
 				this.$refs.extend.show(uni.upx2px(415),uni.upx2px(150))
+			},
+			// 返回
+			back(){
+				uni.navigateBack({
+					delta: 1
+				});
 			}
 		},
 	}

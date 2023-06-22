@@ -1,7 +1,7 @@
 <template>
 	<view class="page">
 		<free-nav-bar bgColor="bg-white">
-			<free-icon-button slot="right">&#xe6ed;</free-icon-button>
+			<free-icon-button slot="right" :icon="'\ue6ed'"></free-icon-button>
 		</free-nav-bar>
 		
 		<free-list-item cover="../../../static/images/demo/demo6.jpg" coverSize="120" title="楚绵" showRight>

@@ -6,7 +6,7 @@
 			<free-avater :src="item.avatar" size="92"></free-avater>
 			<free-badge badgeClass="position-absolute"
 			badgeStyle="top:15rpx;right:15rpx"
-			v-if="item.noreadnum">{{item.noreadnum}}</free-badge>
+			v-if="item.noreadnum" :value="item.noreadnum"></free-badge>
 		</view>
 		<view class="flex flex-column border-bottom flex-1 py-3 pr-3 border-light-secondary">
 			<view class="flex align-center justify-between mb-1">
@@ -36,7 +36,9 @@
 		},
 		methods:{
 			onClick(){
-				this.$emit('click')
+				uni.navigateTo({
+					url: '/pages/chat/chat/chat',
+				});
 			},
 			long(e){
 				let x = 0
