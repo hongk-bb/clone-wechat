@@ -17,15 +17,20 @@
 			<template v-if="!isself">
 				<free-avater size="70" :src="item.avatar"></free-avater>
 				
-				<text class="iconfont text-white font-md position-absolute chat-left-icon">&#xe609;</text>
+				<text v-if="hasLabelClass" class="iconfont text-white font-md position-absolute chat-left-icon">&#xe609;</text>
 			</template>
 			
-			<div class="p-2 rounded" :class="isself ? 'bg-chat-item mr-3' : 'bg-white ml-3'" style="max-width:500rpx;">
-				<text class="font-md">{{item.data}}</text>
+			<div class="p-2 rounded" :class="labelClass" style="max-width:500rpx;">
+				<!-- 文字 -->
+				<text v-if="item.type === 'text'" class="font-md">{{item.data}}</text>
+				<!-- 表情包 -->
+				<image v-else-if="item.type === 'emoticon'" :src="item.data"
+				lazy-load mode="widthFix" style="width: 300rpx;height: 300rpx;"></image>
+				
 			</div>
 			<!-- 本人 -->
 			<template v-if="isself">
-				<text class="iconfont text-chat-item font-md position-absolute chat-right-icon">&#xe640;</text>
+				<text v-if="hasLabelClass" class="iconfont text-chat-item font-md position-absolute chat-right-icon">&#xe640;</text>
 				<free-avater size="70" :src="item.avatar"></free-avater>
 			</template>
 		</view>
@@ -56,6 +61,15 @@
 			// 显示的时间
 			showTime(){
 				return $T.getChatTime(this.item.create_time,this.pretime)
+			},
+			// 是否需要气泡样式
+			hasLabelClass(){
+				return this.item.type === 'text' || this.item.type === 'audio'
+			},
+			// 气泡的样式
+			labelClass(){
+				let label = this.hasLabelClass ? 'bg-chat-item mr-3' : 'mr-3'
+				return this.isself ? label : 'bg-white ml-3'
 			}
 		},
 		mounted() {

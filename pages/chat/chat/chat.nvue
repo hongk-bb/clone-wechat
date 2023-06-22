@@ -1,5 +1,6 @@
 <template>
 	<view>
+
 		<!-- 导航栏 -->
 		<free-nav-bar title="帝莎编程学院" :noreadnum="1" showBack>
 			<free-icon-button slot="right" 
@@ -7,26 +8,66 @@
 		</free-nav-bar>
 		
 		<!-- 聊天内容区域 -->
-		<scroll-view scroll-y class="bg-light position-fixed left-0 right-0 px-3" style="bottom: 105rpx;" :style="chatBodyBottom" :show-scrollbar="false">
+		<scroll-view scroll-y class="bg-light position-fixed left-0 right-0 px-3" style="bottom: 105rpx;" :style="chatBodyBottom" :show-scrollbar="false"
+		@click="clickPage">
 			
 			<!-- 聊天信息列表组件 -->
 			<block v-for="(item,index) in list" :key="index">
-				<free-chat-item :item="item" :index="index"
+				<free-chat-item :item="item" :index="index" ref="chatItem"
 				:pretime=" index > 0 ? list[index-1].create_time : 0"
 				@long="long"></free-chat-item>
 			</block>
 		</scroll-view>
+		
+		<!-- #ifdef APP-PLUS-NVUE -->
+		<div v-if="mode === 'action' || mode === 'emoticon'"
+		class="position-fixed top-0 right-0 left-0"
+		:style="'bottom:'+maskBottom+'px;'"
+		@click="clickPage"></div>
+		<!-- #endif -->
 		
 		<!-- 底部输入框 -->
 		<view class="position-fixed left-0 right-0 border-top flex align-center" style="background-color: #F7F7F6;height: 105rpx;" 
 		:style="'bottom:'+KeyboardHeight+'px;'">
 			<free-icon-button :icon="'\ue606'"></free-icon-button>
 			<view class="flex-1">
-				<textarea fixed class="bg-white rounded p-2 font-md" style="height: 75rpx;" :adjust-position="false"/>
+				<textarea fixed class="bg-white rounded p-2 font-md" style="height: 75rpx;" :adjust-position="false" v-model="text" @focus="mode = 'text'"/>
 			</view>
-			<free-icon-button :icon="'\ue605'"></free-icon-button>
-			<free-icon-button :icon="'\ue603'"></free-icon-button>
+			<!-- 表情 -->
+			<free-icon-button :icon="'\ue605'"
+			@click="openActionOrEmoticon('emoticon')"></free-icon-button>
+			<template v-if="text.length === 0">
+				<!-- 扩展菜单 -->
+				<free-icon-button :icon="'\ue603'" 
+				@click="openActionOrEmoticon('action')"></free-icon-button>
+			</template>
+			<template v-else>
+				<!-- 发送按钮 -->
+				<view class="main-bg-color rounded mr-2 px-2 py-1"
+				@click="send('text')">
+					<text class="font text-white">发送</text>
+				</view>
+			</template>
+			
 		</view>
+	
+	<!-- 扩展菜单 -->
+	<free-popup ref="action" bottom transformOrigin="center bottom" @hide="KeyboardHeight = 0" :mask="false">
+		<view style="height: 580rpx;" class="border-top border-light-secondary bg-light">
+			<swiper :indicator-dots="emoticonOrActionList.length > 1" style="height: 510rpx;">
+				<swiper-item class="row" 
+				v-for="(item,index) in emoticonOrActionList"
+				:key="index">
+					<view class="col-3 flex flex-column align-center justify-center" style="height: 255rpx;" v-for="(item2,index2) in item" :key="index2" @click="actionEvent(item2)">
+						<image :src="item2.icon" mode="widthFix"
+						style="width: 100rpx;height: 100rpx;"></image>
+						<text class="font-sm text-muted mt-2"
+						>{{item2.name}}</text>
+					</view>
+				</swiper-item>
+			</swiper>
+		</view>
+	</free-popup>
 	
 	
 	<!-- 弹出层 -->
@@ -51,6 +92,10 @@
 </template>
 
 <script>
+	// #ifdef APP-PLUS-NVUE
+	const dom = weex.requireModule('dom')
+	// #endif
+	
 	import freeNavBar from "@/components/free-ui/free-nav-bar.vue"
 	import freeIconButton from "@/components/free-ui/free-icon-button.vue"
 	import freeChatItem from '@/components/free-ui/free-chat-item.vue';
@@ -64,6 +109,38 @@
 		},
 		data() {
 			return {
+				// 模式 text输入文字，emoticon表情，action操作，audio音频
+				mode:"text",
+				// 扩展菜单列表
+				actionList:[
+					[{
+						name:"相册",
+						icon:"/static/images/extends/pic.png",
+						event:"uploadImage"
+					},{
+						name:"拍摄",
+						icon:"/static/images/extends/video.png",
+						event:""
+					},{
+						name:"收藏",
+						icon:"/static/images/extends/shoucan.png",
+						event:""
+					},{
+						name:"名片",
+						icon:"/static/images/extends/man.png",
+						event:""
+					},{
+						name:"语音通话",
+						icon:"/static/images/extends/phone.png",
+						event:""
+					},{
+						name:"位置",
+						icon:"/static/images/extends/path.png",
+						event:""
+					}]
+				],
+				emoticonList:[],
+				// 键盘高度
 				KeyboardHeight:0,
 				menus:[{ 
 					name:"复制",
@@ -120,6 +197,8 @@
 				}],
 				// 当前操作的气泡索引
 				propIndex:-1,
+				// 输入文字
+				text:""
 			}
 		},
 		mounted() {
@@ -130,10 +209,19 @@
 			
 			// 监听键盘高度变化
 			uni.onKeyboardHeightChange(res => {
-			  this.KeyboardHeight = res.height
+			  if (this.mode !== 'action' && this.mode !== 'emoticon') {
+			  	this.KeyboardHeight = res.height 
+			  }
+			  if (this.KeyboardHeight > 0) {
+			  	this.pageToBottom()
+			  }
 			})
 		},
 		computed: {
+			// 获取蒙版的位置
+			maskBottom(){
+				return this.KeyboardHeight + uni.upx2px(105)
+			},
 			// 动态获取菜单高度
 			getMenusHeight(){
 				let H = 100
@@ -163,9 +251,97 @@
 			// 聊天区域bottom
 			chatBodyBottom(){
 				return `bottom:${uni.upx2px(105) + this.KeyboardHeight}px;top:${this.navBarHeight}px;`
+			},
+			// 获取操作或者表情列表
+			emoticonOrActionList(){
+				return (this.mode === 'emoticon' || this.mode === 'action') ? this[this.mode+'List'] : []
 			}
 		},
+		watch: {
+			mode(newValue, oldValue) {
+				if (newValue !== 'action' && newValue !== 'emoticon') {
+					this.$refs.action.hide()
+				}
+				if (newValue !== 'text') {
+					uni.hideKeyboard()
+				}
+			}
+		},
+		created() {
+			// 初始化
+			this.__init()
+		},
 		methods: {
+			__init(){
+				var total = 20
+				var page = Math.ceil(total/8)
+				var arr = []
+				for (var i = 0; i < page; i++) {
+					var start = i*8
+					arr[i] = []
+					for (var j = 0; j < 8; j++) {
+						var no = start + j
+						console.log(no)
+						if ((no+1) > total) {
+							continue;
+						}
+						arr[i].push({
+							name:"表情"+no,
+							icon:"/static/images/emoticon/5497/"+no+'.gif',
+							event:"sendEmoticon"
+						})
+					}
+				}
+				this.emoticonList = arr
+			},
+			// 打开扩展菜单或者表情包
+			openActionOrEmoticon(mode = 'action'){
+				this.mode = mode
+				this.$refs.action.show()
+				
+				uni.hideKeyboard()
+				this.KeyboardHeight = uni.upx2px(580)
+			},
+			// 发送
+			send(type, data = ''){
+				var obj = {
+					avatar:"/static/images/demo/demo6.jpg",
+					user_id:1,
+					nickname:"昵称",
+					type:type,// image,audio,video,emoticon
+					data:"",
+					create_time:(new Date()).getTime(),
+					isremove:false
+				}
+				switch (type){
+					case 'text':
+					obj.data = this.text
+						break;
+					default:
+					obj.data = data
+						break;
+				}
+				this.list.push(obj)
+				// 发送文字成功，清空输入框
+				if (type === 'text') {
+					this.text = ''
+				}
+				// 置于底部
+				var pageToBottomTimer = setTimeout(()=>{
+					this.pageToBottom()
+					clearTimeout(pageToBottomTimer)
+				},200)
+			},
+			// 回到底部
+			pageToBottom(){
+				// #ifdef APP-PLUS-NVUE
+				let chatItem = this.$refs.chatItem
+				let lastIndex = chatItem.length > 0 ? chatItem.length - 1 : 0
+				if (chatItem[lastIndex]) {
+					dom.scrollToElement(chatItem[lastIndex],{})
+				}
+				// #endif
+			},
 			// 长按消息气泡
 			long({x,y,index}){
 				// 初始化 索引
@@ -187,6 +363,21 @@
 				}
 				// 关闭菜单
 				this.$refs.extend.hide()
+			},
+			// 扩展菜单
+			actionEvent(e){
+				switch (e.event){
+					case 'uploadImage':
+					console.log('上传图片');
+						break;
+					case 'sendEmoticon': // 发送表情包
+					this.send('emoticon',e.icon)
+						break;
+				}
+			},
+			// 点击页面
+			clickPage(){
+				this.mode = ''
 			}
 		}
 	}
